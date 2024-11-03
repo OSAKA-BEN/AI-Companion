@@ -6,15 +6,15 @@ import Image from "next/image";
 interface ImageUploadProps {
   value: string;
   onChange: (base64: string) => void;
-  disabled?: boolean;
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, disabled }: ImageUploadProps) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange }: ImageUploadProps) => {
 
 
     return (
       <div className="space-y-4 w-full flex flex-col justify-center items-center">
         <CldUploadButton
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onSuccess={(result: any) => {
             onChange(result.info.secure_url);
           }}
