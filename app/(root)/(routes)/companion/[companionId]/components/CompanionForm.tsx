@@ -138,7 +138,6 @@ const CompanionForm = ({ initialData, categories }: CompanionFormProps) => {
                   <FormLabel>Name</FormLabel>
                 <FormControl>
                   <ImageUpload
-                    disabled={isLoading}
                     value={field.value}
                     onChange={field.onChange}
                   />

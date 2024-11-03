@@ -3,14 +3,17 @@ import { checkSubscription } from "@/lib/subscription"
 import { auth, currentUser } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
 
-export async function PATCH(req: Request, { params }: { params: { companionId: string } }) {
+type Params = Promise<{ id: string }> 
+
+export async function PATCH(req: Request, props: { params: Params }) {
+  const params = await props.params;
 
   try {
     const body = await req.json()
     const user = await currentUser()
     const { name, description, instructions, seed, src, categoryId } = body
 
-    if (!params.companionId) {
+    if (!params.id) {
       return new NextResponse("Companion ID is required", { status: 400 })
     }
 
@@ -30,7 +33,7 @@ export async function PATCH(req: Request, { params }: { params: { companionId: s
 
     const companion = await prismadb.companion.update({
       where: {
-        id: params.companionId,
+        id: params.id,
         userId: user.id,
       },
       data: {
@@ -54,7 +57,8 @@ export async function PATCH(req: Request, { params }: { params: { companionId: s
 
 }
 
-export async function DELETE(req: Request, { params }: { params: { companionId: string } }) {
+export async function DELETE(req: Request, props: { params: Params }) {
+  const params = await props.params;
 
   try {
     const { userId } = await auth();
@@ -66,7 +70,7 @@ export async function DELETE(req: Request, { params }: { params: { companionId: 
     const companion = await prismadb.companion.delete({
       where: {
         userId,
-        id: params.companionId,
+        id: params.id,
       },
     });
 

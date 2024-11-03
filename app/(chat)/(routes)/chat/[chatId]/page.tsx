@@ -4,15 +4,12 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import ChatClient from "./components/client";
 
-interface ChatIdPageProps {
-  params: {
-    chatId: string;
-  }
-}
+type Params = Promise<{ id: string }>
 
-const ChatIdPage = async ({params}: ChatIdPageProps) => {
-  const awaitedParams = await params;
+const ChatIdPage = async (props: { params: Params }) => {
   const { userId } = await auth();
+  const params = await props.params;
+  const chatId = params.id;
 
   if (!userId) {
     return RedirectToSignIn;
@@ -20,7 +17,7 @@ const ChatIdPage = async ({params}: ChatIdPageProps) => {
 
   const companion = await prismadb.companion.findUnique({
     where: {
-      id: awaitedParams.chatId,
+      id: chatId,
     },
     include: {
       messages: {

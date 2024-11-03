@@ -1,7 +1,6 @@
 import { Redis } from "@upstash/redis";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { Pinecone } from "@pinecone-database/pinecone";
-// @ts-expect-error PineconeStore is not typed
 import { PineconeStore } from "@langchain/pinecone";
 
 export type CompanionKey = {
@@ -27,7 +26,8 @@ export class MemoryManager {
     companionFileName: string
   ) {
     const pineconeClient = this.vectorDBClient;
-    const pineconeIndex = pineconeClient.Index(process.env.PINECONE_INDEX!);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const pineconeIndex = pineconeClient.Index(process.env.PINECONE_INDEX!) as any;
 
     const vectorStore = await PineconeStore.fromExistingIndex(
       new OpenAIEmbeddings({

@@ -3,14 +3,11 @@ import CompanionForm from "./components/CompanionForm";
 import { auth } from "@clerk/nextjs/server";
 import { RedirectToSignIn } from "@clerk/nextjs";
 
-interface CompanionIdPageProps {
-  params: {
-    companionId: string;
-  };
-}
+type Params = Promise<{ id: string }>
 
-const CompanionIdPage = async ({ params }: CompanionIdPageProps) => {
-  const awaitedParams = await params;
+const CompanionIdPage = async (props: { params: Params }) => {
+  const params = await props.params;
+  const companionId = params.id;
   const { userId } = await auth();
 
   if (!userId) {
@@ -19,7 +16,7 @@ const CompanionIdPage = async ({ params }: CompanionIdPageProps) => {
 
   const companion = await prismadb.companion.findUnique({
     where: {
-      id: awaitedParams.companionId,
+      id: companionId,
       userId,
     },
   });

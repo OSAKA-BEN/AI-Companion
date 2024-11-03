@@ -5,11 +5,13 @@ import { MemoryManager } from "../../../../lib/memory";
 import { getRateLimit } from "../../../../lib/rate-limit";
 import prismadb from "../../../../lib/prismadb";
 
+type Params = Promise<{ id: string }>
+
 export async function POST(
   req: NextRequest,
-  { params }: { params: { chatId: string } }
+  props: { params: Params }
 ) {
-  const awaitedParams = await params
+  const params = await props.params;
   try {
     const { prompt } = await req.json();
     const user = await currentUser();
@@ -27,7 +29,7 @@ export async function POST(
 
     const companion = await prismadb.companion.update({
       where: {
-        id: awaitedParams.chatId,
+        id: params.id,
       },
       data: {
         messages: {
@@ -109,7 +111,7 @@ ${recentChatHistory}\n${name}
 
       await prismadb.companion.update({
         where: {
-          id: awaitedParams.chatId,
+          id: params.id,
         },
         data: {
           messages: {
