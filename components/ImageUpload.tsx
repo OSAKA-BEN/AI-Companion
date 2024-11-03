@@ -16,7 +16,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, disabled }: 
       <div className="space-y-4 w-full flex flex-col justify-center items-center">
         <CldUploadButton
           onSuccess={(result: any) => {
-            console.log('URL de l\'image téléchargée :', result.info.secure_url); // Pour le débogage
             onChange(result.info.secure_url);
           }}
           options={{
