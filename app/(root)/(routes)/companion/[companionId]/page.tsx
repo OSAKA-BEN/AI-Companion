@@ -3,12 +3,14 @@ import CompanionForm from "./components/CompanionForm";
 import { auth } from "@clerk/nextjs/server";
 import { RedirectToSignIn } from "@clerk/nextjs";
 
-type Params = Promise<{ id: string }>
+type Params = Promise<{ companionId: string }>
 
 const CompanionIdPage = async (props: { params: Params }) => {
   const params = await props.params;
-  const companionId = params.id;
+  const companionId = params.companionId;
   const { userId } = await auth();
+
+  console.log(companionId);
 
   if (!userId) {
     return RedirectToSignIn;

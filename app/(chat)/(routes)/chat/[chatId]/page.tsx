@@ -4,12 +4,14 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import ChatClient from "./components/client";
 
-type Params = Promise<{ id: string }>
+type Params = Promise<{ chatId: string }>
 
 const ChatIdPage = async (props: { params: Params }) => {
   const { userId } = await auth();
   const params = await props.params;
-  const chatId = params.id;
+  const chatId = params.chatId;
+
+  console.log(chatId);
 
   if (!userId) {
     return RedirectToSignIn;
